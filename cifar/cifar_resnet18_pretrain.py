@@ -2,7 +2,21 @@
 
 """
 upsample the original data size by 8
-use the unpretrained resnet18
+use the pretrained resnet18 and the conv parameters is frozen
+epoch is 10
+GroundTruth:    cat  ship  ship plane
+Predicted:    cat   car  ship  bird
+Accuracy of the network on the 10000 test images: 76 %
+Accuracy of plane : 75 %
+Accuracy of   car : 92 %
+Accuracy of  bird : 63 %
+Accuracy of   cat : 58 %
+Accuracy of  deer : 70 %
+Accuracy of   dog : 51 %
+Accuracy of  frog : 80 %
+Accuracy of horse : 84 %
+Accuracy of  ship : 90 %
+Accuracy of truck : 84 %
 """
 
 """
@@ -99,14 +113,14 @@ def imshow(img):
     img = img / 2 + 0.5     # unnormalize
     npimg = img.numpy()
     plt.imshow(np.transpose(npimg, (1, 2, 0)))
-    plt.show()
+   # plt.show()
 
 # get some random training images
 dataiter = iter(trainloader)
 images, labels = dataiter.next()
 
 # show images
-imshow(torchvision.utils.make_grid(images))
+#imshow(torchvision.utils.make_grid(images))
 # print labels
 print(' '.join('%5s' % classes[labels[j]] for j in range(4)))
 
@@ -244,7 +258,7 @@ dataiter = iter(testloader)
 images, labels = dataiter.next()
 
 # print images
-imshow(torchvision.utils.make_grid(images))
+#imshow(torchvision.utils.make_grid(images))
 print('GroundTruth: ', ' '.join('%5s' % classes[labels[j]] for j in range(4)))
 
 ########################################################################
