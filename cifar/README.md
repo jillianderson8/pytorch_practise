@@ -10,8 +10,8 @@ the resnet18 is based on the resnet 18 with and without pretrain also frozen the
 
 | File Name                                 | pretrain    |epoch|frozen conv|result|
 | ------------------------------------------|------------- |-----|----------|------|
-| cifar_resnet18_no_pretrain.py             | no           |10   |n/a|     |
-| cifar_resnet18_pretrain.py                | yes          |10   |yes|   |
-| cifar_resnet18_pretrain_30_epoch.py       | yes          |30   |yes|   |
+| cifar_resnet18_no_pretrain.py             | no           |10   |n/a|     71 %|
+| cifar_resnet18_pretrain.py                | yes          |10   |yes|   76 %|
+| cifar_resnet18_pretrain_30_epoch.py       | yes          |30   |yes|   77 %|
 |cifar_resnet18_pretrain_unfrozen_30epoch.py|  yes         |30   |no|    |
  
