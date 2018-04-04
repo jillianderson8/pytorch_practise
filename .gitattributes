@@ -1,2 +1,5 @@
 *.tar.gz filter=lfs diff=lfs merge=lfs -text
+<<<<<<< HEAD
 *.gz filter=lfs diff=lfs merge=lfs -text
+=======
+>>>>>>> 66d385593be2b7b68af41c7f9fada786b01ee26a
