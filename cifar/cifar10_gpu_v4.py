@@ -251,7 +251,7 @@ correct = 0
 total = 0
 for data in testloader:
     images, labels = data
-    outputs = net(Variable(images.cuda()))
+    outputs = net(m(Variable(images.cuda())))
     _, predicted = torch.max(outputs.data, 1)
     total += labels.size(0)
     correct += (predicted.cuda() == labels.cuda()).sum()
@@ -271,7 +271,7 @@ class_correct = list(0. for i in range(10))
 class_total = list(0. for i in range(10))
 for data in testloader:
     images, labels = data
-    outputs = net(images.cuda())
+    outputs = net(m(Variable(images.cuda())))
     _, predicted = torch.max(outputs.data, 1)
     c = (predicted.cuda() == labels.cuda()).squeeze()
     for i in range(4):
