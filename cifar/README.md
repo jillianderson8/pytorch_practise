@@ -13,5 +13,5 @@ the resnet18 is based on the resnet 18 with and without pretrain also frozen the
 | cifar_resnet18_no_pretrain.py             | no           |10   |n/a|     71 %|
 | cifar_resnet18_pretrain.py                | yes          |10   |yes|   76 %|
 | cifar_resnet18_pretrain_30_epoch.py       | yes          |30   |yes|   77 %|
-|cifar_resnet18_pretrain_unfrozen_30epoch.py|  yes         |30   |no|    |
+|cifar_resnet18_pretrain_unfrozen_30epoch.py|  yes         |30   |no|  93 %  |
  
