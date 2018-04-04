@@ -3,6 +3,18 @@
 """
 upsample the original data size by 8
 use the unpretrained resnet18
+resut for the 10 epoch
+Accuracy of the network on the 10000 test images: 71 %
+Accuracy of plane : 75 %
+Accuracy of   car : 92 %
+Accuracy of  bird : 63 %
+Accuracy of   cat : 52 %
+Accuracy of  deer : 77 %
+Accuracy of   dog : 63 %
+Accuracy of  frog : 61 %
+Accuracy of horse : 64 %
+Accuracy of  ship : 81 %
+Accuracy of truck : 84 %
 """
 
 """
