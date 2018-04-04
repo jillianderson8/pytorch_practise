@@ -8,9 +8,10 @@ the gpu version is changed from without padding to padding to padding+deeper net
 
 the resnet18 is based on the resnet 18 with and without pretrain also frozen the conv parameters and unfrozen the parameters of the conv layer. detail is given as below:
 
-| File Name                                 | pretrain?    |epoch|
-| ------------------------------------------|------------- |-----|
-| cifar_resnet18_no_pretrain.py             | no           |10   |
-| cifar_resnet18_pretrain.py                | yes          |10   |
-| cifar_resnet18_pretrain_30_epoch.py       | yes          |30   |
-|cifar_resnet18_pretrain_unfrozen_30epoch.py|  yes         |30   |
+| File Name                                 | pretrain    |epoch|frozen conv|result|
+| ------------------------------------------|------------- |-----|----------|------|
+| cifar_resnet18_no_pretrain.py             | no           |10   |n/a|     |
+| cifar_resnet18_pretrain.py                | yes          |10   |yes|   |
+| cifar_resnet18_pretrain_30_epoch.py       | yes          |30   |yes|   |
+|cifar_resnet18_pretrain_unfrozen_30epoch.py|  yes         |30   |no|    |
+ 
