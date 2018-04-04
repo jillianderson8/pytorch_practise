@@ -150,7 +150,6 @@ class Net(nn.Module):
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
         return x
-<<<<<<< HEAD
 """
 # remove one layer to show the dimension of the intermedia layer
 model =torchvision.models.resnet18()
@@ -161,21 +160,15 @@ x = Variable(torch.randn(4,3,32*8, 32*8))
 y = model(x)
 print(y.size())
 """
-=======
 
 
->>>>>>> 66d385593be2b7b68af41c7f9fada786b01ee26a
 net = Net()
 print("old net",net)
 import torchvision.models as models
 net =models.resnet18()
 #print(resnet18)
 print("original resnet18",net)
-<<<<<<< HEAD
 num_ftrs = 512*4
-=======
-num_ftrs = net.fc.in_features
->>>>>>> 66d385593be2b7b68af41c7f9fada786b01ee26a
 net.fc = nn.Linear(num_ftrs, 10)
 net.cuda()
 ########################################################################
@@ -272,11 +265,7 @@ correct = 0
 total = 0
 for data in testloader:
     images, labels = data
-<<<<<<< HEAD
     outputs = net(m(Variable(images.cuda())))
-=======
-    outputs = net(Variable(images.cuda()))
->>>>>>> 66d385593be2b7b68af41c7f9fada786b01ee26a
     _, predicted = torch.max(outputs.data, 1)
     total += labels.size(0)
     correct += (predicted.cuda() == labels.cuda()).sum()
@@ -296,11 +285,7 @@ class_correct = list(0. for i in range(10))
 class_total = list(0. for i in range(10))
 for data in testloader:
     images, labels = data
-<<<<<<< HEAD
     outputs = net(m(Variable(images.cuda())))
-=======
-    outputs = net(images.cuda())
->>>>>>> 66d385593be2b7b68af41c7f9fada786b01ee26a
     _, predicted = torch.max(outputs.data, 1)
     c = (predicted.cuda() == labels.cuda()).squeeze()
     for i in range(4):
