@@ -266,3 +266,23 @@ type of the trainloader <class 'torch.utils.data.dataloader.DataLoader'>
 [28,   100] loss: 0.577
 [28,   200] loss: 0.607
 [28,   300] loss: 0.584
+[29,   100] loss: 0.577
+[29,   200] loss: 0.594
+[29,   300] loss: 0.591
+[30,   100] loss: 0.583
+[30,   200] loss: 0.583
+[30,   300] loss: 0.590
+Finished Training
+GroundTruth:    cat  ship  ship plane
+Predicted:    cat   car  ship  bird
+Accuracy of the network on the 10000 test images: 77 %
+Accuracy of plane : 75 %
+Accuracy of   car : 96 %
+Accuracy of  bird : 69 %
+Accuracy of   cat : 55 %
+Accuracy of  deer : 59 %
+Accuracy of   dog : 60 %
+Accuracy of  frog : 77 %
+Accuracy of horse : 84 %
+Accuracy of  ship : 90 %
+Accuracy of truck : 87 %
