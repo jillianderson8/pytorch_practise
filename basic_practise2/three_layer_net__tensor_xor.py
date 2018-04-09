@@ -27,7 +27,7 @@ dtype = torch.cuda.FloatTensor # Uncomment this to run on GPU
 
 # N is batch size; D_in is input dimension;
 # H is hidden dimension; D_out is output dimensionN, D_in, H, H2,D_out = 6400, 2, 16,8, 1
-N, D_in, H1, H2,H3, D_out = 12800, 2, 100, 50, 20, 1
+N, D_in, H1, H2,H3, D_out = 12800, 2, 100, 40, 20, 1
 # Create random input and output data
 #x = torch.randn(N, D_in).type(dtype)
 
@@ -37,8 +37,9 @@ w1 = torch.randn(D_in, H1).type(dtype)
 w2 = torch.randn(H1, H2).type(dtype)
 w3 = torch.randn(H2, H3).type(dtype)
 w4 = torch.randn(H3, D_out).type(dtype)
-learning_rate = 2e-7
-for mini_patch in range(1000):
+learning_rate = 5e-8
+for mini_patch in range(2000):
+    print( "mini patch:", mini_patch)
     learning_rate/=(mini_patch+1)
     x_ = torch.randn(N, D_in).type(dtype)
     y = torch.zeros(N, D_out).type(dtype)
@@ -51,7 +52,7 @@ for mini_patch in range(1000):
             y[i,0]=1.0
         #y[i,0] = x[i,0]*x[i,1]
         #print(x[i,0],x[i,1], y[i,0])
-    for t in range(2000):
+    for t in range(6000):
     # Forward pass: compute predicted y
         h1 = x.mm(w1)
         h1_relu = h1.clamp(min=0)
