@@ -42,7 +42,9 @@ for mini_patch in range(10):
     x =torch.zeros(N, D_in).type(dtype)
     x[x_ > 0.5] = 1.0
     for i in range(N):
-        y[i,0] = x[i,0]*x[i,1]
+        y[i,0] = x[i,0]+x[i,1]
+        if y[i,0]>1.5:
+            y[i,0] = 1.0
         # print(x[i,0],x[i,1], y[i,0])
     for t in range(10000):
     # Forward pass: compute predicted y
