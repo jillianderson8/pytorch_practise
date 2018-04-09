@@ -37,7 +37,7 @@ w1 = torch.randn(D_in, H1).type(dtype)
 w2 = torch.randn(H1, H2).type(dtype)
 w3 = torch.randn(H2, H3).type(dtype)
 w4 = torch.randn(H3, D_out).type(dtype)
-learning_rate = 5e-8
+learning_rate = 1e-7
 for mini_patch in range(2000):
     print( "mini patch:", mini_patch)
     learning_rate/=(mini_patch+1)
