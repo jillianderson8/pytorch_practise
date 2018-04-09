@@ -26,18 +26,26 @@ dtype = torch.cuda.FloatTensor # Uncomment this to run on GPU
 
 # N is batch size; D_in is input dimension;
 # H is hidden dimension; D_out is output dimension.
-N, D_in, H, D_out = 64, 1000, 100, 10
+N, D_in, H, D_out = 64, 2, 16, 1
 
 # Create random input and output data
-x = torch.randn(N, D_in).type(dtype)
+#x = torch.randn(N, D_in).type(dtype)
+x_ = torch.randn(N, D_in).type(dtype)
 y = torch.randn(N, D_out).type(dtype)
+x =torch.zeros(N, D_in).type(dtype)
+x[x_ > 0.5] = 1.0
+for i in range(N):
+    y[i,0] = x[i,0]*x[i,1]
+
+#print (x)
+#print (y)
 
 # Randomly initialize weights
 w1 = torch.randn(D_in, H).type(dtype)
 w2 = torch.randn(H, D_out).type(dtype)
 
 learning_rate = 1e-6
-for t in range(500):
+for t in range(50000):
     # Forward pass: compute predicted y
     h = x.mm(w1)
     h_relu = h.clamp(min=0)
@@ -58,3 +66,15 @@ for t in range(500):
     # Update weights using gradient descent
     w1 -= learning_rate * grad_w1
     w2 -= learning_rate * grad_w2
+
+x_new_ = torch.randn(N, D_in).type(dtype)
+x_new =torch.zeros(N, D_in).type(dtype)
+x_new[x_new_ > 0.5] = 1.0
+
+
+h = x.mm(w1)
+h_relu = h.clamp(min=0)
+y_pred = h_relu.mm(w2)
+
+for i in range(100):
+    print(int(x_new[i,0])," and ",int(x_new[i,1])," is ", int(y[i,0]))
