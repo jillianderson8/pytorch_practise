@@ -2,6 +2,18 @@
 
 """
 upsample the original data size by 8
+result of 10 epoch
+Accuracy of the network on the 10000 test images: 59 %
+Accuracy of plane : 58 %
+Accuracy of   car : 85 %
+Accuracy of  bird : 54 %
+Accuracy of   cat : 29 %
+Accuracy of  deer : 33 %
+Accuracy of   dog : 30 %
+Accuracy of  frog : 69 %
+Accuracy of horse : 72 %
+Accuracy of  ship : 78 %
+Accuracy of truck : 61 %
 """
 
 """

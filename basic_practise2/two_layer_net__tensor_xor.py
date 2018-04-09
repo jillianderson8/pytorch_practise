@@ -38,12 +38,16 @@ learning_rate = 1e-6
 for mini_patch in range(10):
     learning_rate/=(mini_patch+1)
     x_ = torch.randn(N, D_in).type(dtype)
-    y = torch.randn(N, D_out).type(dtype)
+    y = torch.zeros(N, D_out).type(dtype)
     x =torch.zeros(N, D_in).type(dtype)
     x[x_ > 0.5] = 1.0
     for i in range(N):
-        y[i,0] = x[i,0]*x[i,1]
-        # print(x[i,0],x[i,1], y[i,0])
+        # xor is done here. 0,0 ==> 1 ,
+        #                   1,1 ==> 1
+        if sum(x[i])<0.5 or sum(x[i])>1.5:
+            y[i,0]=1.0
+        #y[i,0] = x[i,0]*x[i,1]
+        #print(x[i,0],x[i,1], y[i,0])
     for t in range(10000):
     # Forward pass: compute predicted y
         h = x.mm(w1)
