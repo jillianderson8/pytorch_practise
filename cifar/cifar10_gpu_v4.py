@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-transfer learning without pretraining is used
+upsample the original data size by 8
 """
 
 """
@@ -74,13 +74,13 @@ transform = transforms.Compose(
 
 trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
                                         download=True, transform=transform)
-trainloader = torch.utils.data.DataLoader(trainset, batch_size=4,
-                                          shuffle=True, num_workers=2)
+trainloader = torch.utils.data.DataLoader(trainset, batch_size=128,
+                                          shuffle=True, num_workers=4)
 
 testset = torchvision.datasets.CIFAR10(root='./data', train=False,
                                        download=True, transform=transform)
-testloader = torch.utils.data.DataLoader(testset, batch_size=4,
-                                         shuffle=False, num_workers=2)
+testloader = torch.utils.data.DataLoader(testset, batch_size=128,
+                                         shuffle=False, num_workers=4)
 
 classes = ('plane', 'car', 'bird', 'cat',
            'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
@@ -130,7 +130,7 @@ class Net(nn.Module):
         self.conv2 = nn.Conv2d(6, 16, 5)
         self.conv3 = nn.Conv2d(16, 32, 5)
         self.conv4 = nn.Conv2d(32, 64, 5)
-        self.fc1 = nn.Linear(64 * 4 * 4, 120)
+        self.fc1 = nn.Linear(64*32*32, 120)
         self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, 10)
 
@@ -143,7 +143,8 @@ class Net(nn.Module):
         x = F.relu(self.conv3(x))
         x = self.pad(x)
         x = self.pool(F.relu(self.conv4(x)))
-        x = x.view(-1, 64 * 4 * 4)
+       # print(x.size())
+        x = x.view(-1, 64 * 32 * 32)
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
@@ -163,6 +164,7 @@ net.cuda()
 
 import torch.optim as optim
 
+m = nn.Upsample(scale_factor=8)
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
@@ -174,16 +176,17 @@ optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 # We simply have to loop over our data iterator, and feed the inputs to the
 # network and optimize.
 print("type of the trainloader", type(trainloader))
-for epoch in range(1):  # loop over the dataset multiple times
+for epoch in range(10):  # loop over the dataset multiple times
 
     running_loss = 0.0
     for i, data in enumerate(trainloader, 0):
         # get the inputs
-        print(i)
+       # print(i)
         inputs, labels = data
-
+        inputs = m(inputs)
+       # print(inputs.size())
         # wrap them in Variable
-        inputs, labels = Variable(inputs.cuda()), Variable(labels.cuda())
+        inputs, labels = inputs.cuda(), Variable(labels.cuda())
 
         # zero the parameter gradients
         optimizer.zero_grad()
@@ -197,9 +200,9 @@ for epoch in range(1):  # loop over the dataset multiple times
 
         # print statistics
         running_loss += loss.data[0]
-        if i % 2000 == 1999:    # print every 2000 mini-batches
+        if i % 100 == 99:    # print every 2000 mini-batches
             print('[%d, %5d] loss: %.3f' %
-                  (epoch + 1, i + 1, running_loss / 2000))
+                  (epoch + 1, i + 1, running_loss / 100))
             running_loss = 0.0
 
 print('Finished Training')
@@ -227,7 +230,7 @@ print('GroundTruth: ', ' '.join('%5s' % classes[labels[j]] for j in range(4)))
 ########################################################################
 # Okay, now let us see what the neural network thinks these examples above are:
 
-outputs = net(Variable(images.cuda()))
+outputs = net(m(Variable(images.cuda())))
 
 ########################################################################
 # The outputs are energies for the 10 classes.
@@ -248,7 +251,7 @@ correct = 0
 total = 0
 for data in testloader:
     images, labels = data
-    outputs = net(Variable(images.cuda()))
+    outputs = net(m(Variable(images.cuda())))
     _, predicted = torch.max(outputs.data, 1)
     total += labels.size(0)
     correct += (predicted.cuda() == labels.cuda()).sum()
@@ -268,7 +271,7 @@ class_correct = list(0. for i in range(10))
 class_total = list(0. for i in range(10))
 for data in testloader:
     images, labels = data
-    outputs = net(Variable(images.cuda()))
+    outputs = net(m(Variable(images.cuda())))
     _, predicted = torch.max(outputs.data, 1)
     c = (predicted.cuda() == labels.cuda()).squeeze()
     for i in range(4):
