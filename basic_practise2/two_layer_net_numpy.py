@@ -17,18 +17,21 @@ import numpy as np
 
 # N is batch size; D_in is input dimension;
 # H is hidden dimension; D_out is output dimension.
-N, D_in, H, D_out = 64, 1000, 100, 10
+N, D_in, H, D_out = 2, 16, 6, 2
 
 # Create random input and output data
 x = np.random.randn(N, D_in)
 y = np.random.randn(N, D_out)
+# A   B  C D 
+# 1   0  0 0
+# 0.9 0  0 0.1
 
 # Randomly initialize weights
 w1 = np.random.randn(D_in, H)
 w2 = np.random.randn(H, D_out)
 
-learning_rate = 1e-6
-for t in range(500):
+learning_rate = 1e-4
+for t in range(1000):
     # Forward pass: compute predicted y
     h = x.dot(w1)
     h_relu = np.maximum(h, 0)

@@ -19,8 +19,8 @@ just cast the Tensor to a cuda datatype.
 """
 
 import torch
-
-
+import torch.nn as nn
+from torch.autograd import Variable
 dtype = torch.FloatTensor
 #dtype = torch.cuda.FloatTensor # Uncomment this to run on GPU
 
@@ -29,52 +29,52 @@ dtype = torch.FloatTensor
 N, D_in, H, D_out = 12800, 2, 20, 1
 # Create random input and output data
 #x = torch.randn(N, D_in).type(dtype)
+model = torch.nn.Sequential(
+    torch.nn.Linear(D_in, H),
+    torch.nn.ReLU(),
+    torch.nn.Linear(H, D_out),
+)
+loss_fn = nn.MSELoss(size_average=False)
 
-
-# Randomly initialize weights
-w1 = torch.randn(D_in, H).type(dtype)
-w2 = torch.randn(H, D_out).type(dtype)
-learning_rate = 1e-6
+learning_rate = 1e-5
 for mini_patch in range(10):
     learning_rate/=(mini_patch+1)
     x_ = torch.randn(N, D_in).type(dtype)
     y = torch.zeros(N, D_out).type(dtype)
     x =torch.zeros(N, D_in).type(dtype)
     x[x_ > 0.5] = 1.0
+    
     for i in range(N):
         y[i,0] = x[i,0]*x[i,1]
         # print(x[i,0],x[i,1], y[i,0])
-    for t in range(10000):
-    # Forward pass: compute predicted y
-        h = x.mm(w1)
-        h_relu = h.clamp(min=0)
-        y_pred = h_relu.mm(w2)
+    x, y= Variable(x,requires_grad=False),Variable(y,requires_grad=False)
+    for t in range(100):
+        y_pred = model(x)
+    
+    # Compute and print loss. We pass Variables containing the predicted and true
+    # values of y, and the loss function returns a Variable containing the
+    # loss.
+        loss = loss_fn(y_pred, y)
+        print(t, loss.data[0])
 
-    # Compute and print loss
-        loss = (y_pred - y).pow(2).sum()
-        if t%1000==0:
-             print(t, loss)
+    # Zero the gradients before running the backward pass.
+        model.zero_grad()
 
-    # Backprop to compute gradients of w1 and w2 with respect to loss
-        grad_y_pred = 2.0 * (y_pred - y)
-        grad_w2 = h_relu.t().mm(grad_y_pred)
-        grad_h_relu = grad_y_pred.mm(w2.t())
-        grad_h = grad_h_relu.clone()
-        grad_h[h < 0] = 0
-        grad_w1 = x.t().mm(grad_h)
+    # Backward pass: compute gradient of the loss with respect to all the learnable
+    # parameters of the model. Internally, the parameters of each Module are stored
+    # in Variables with requires_grad=True, so this call will compute gradients for
+    # all learnable parameters in the model.
+        loss.backward()
 
-    # Update weights using gradient descent
-        w1 -= learning_rate * grad_w1
-        w2 -= learning_rate * grad_w2
-
+    # Update the weights using gradient descent. Each parameter is a Variable, so
+    # we can access its data and gradients like we did before.
+        for param in model.parameters():
+            param.data -= learning_rate * param.grad.data
 x_new_ = torch.randn(N, D_in).type(dtype)
 x_new =torch.zeros(N, D_in).type(dtype)
 x_new[x_new_ > 0.5] = 1.0
-
-
-h = x_new.mm(w1)
-h_relu = h.clamp(min=0)
-y_pred = h_relu.mm(w2)
+x_new=Variable(x_new,requires_grad=False)
+y_pred = model(x_new)
 
 for i in range(100):
     print(float(x_new[i,0])," and ",float(x_new[i,1])," is ", float(y_pred[i,0]))
